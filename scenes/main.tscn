@@ -1,0 +1,142 @@
+[gd_scene load_steps=13 format=3 uid="uid://ba3abjy1hqp4c"]
+
+[ext_resource type="Texture2D" uid="uid://cteahxudc4gxw" path="res://assets/Bg.png" id="1_ingd5"]
+[ext_resource type="Script" path="res://scenes/main.gd" id="2_aymvf"]
+[ext_resource type="FontFile" uid="uid://damboliwq36kg" path="res://assets/pixel_font.ttf" id="2_e4014"]
+[ext_resource type="Script" path="res://scenes/Player.gd" id="3_5hvpt"]
+[ext_resource type="Script" path="res://scenes/Ball.gd" id="4_p5twt"]
+[ext_resource type="Script" path="res://scenes/CPU.gd" id="4_vvpnw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3ur56"]
+size = Vector2(20, 119)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_slpsk"]
+size = Vector2(10, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h42v1"]
+size = Vector2(1151, 26)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nv0gj"]
+size = Vector2(1151, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gj7r1"]
+size = Vector2(32, 639)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_360ay"]
+size = Vector2(28, 639)
+
+[node name="Main" type="Sprite2D"]
+texture_filter = 1
+position = Vector2(576, 324)
+texture = ExtResource("1_ingd5")
+script = ExtResource("2_aymvf")
+
+[node name="Player" type="StaticBody2D" parent="."]
+position = Vector2(-550, -15)
+script = ExtResource("3_5hvpt")
+
+[node name="ColorRect" type="ColorRect" parent="Player"]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -60.0
+offset_right = 20.0
+offset_bottom = 60.0
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+position = Vector2(10, -0.5)
+shape = SubResource("RectangleShape2D_3ur56")
+
+[node name="CPU" type="StaticBody2D" parent="."]
+position = Vector2(530, -15)
+script = ExtResource("4_vvpnw")
+
+[node name="ColorRect" type="ColorRect" parent="CPU"]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -60.0
+offset_right = 20.0
+offset_bottom = 60.0
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CPU"]
+position = Vector2(10, -0.5)
+shape = SubResource("RectangleShape2D_3ur56")
+
+[node name="Ball" type="CharacterBody2D" parent="."]
+position = Vector2(-5, 0)
+collision_mask = 3
+script = ExtResource("4_p5twt")
+
+[node name="ColorRect" type="ColorRect" parent="Ball"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = -15.0
+offset_right = 10.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ball"]
+position = Vector2(5, -10)
+shape = SubResource("RectangleShape2D_slpsk")
+
+[node name="Borders" type="StaticBody2D" parent="."]
+collision_layer = 2
+
+[node name="Top" type="CollisionShape2D" parent="Borders"]
+position = Vector2(-0.5, -331)
+shape = SubResource("RectangleShape2D_h42v1")
+
+[node name="Bottom" type="CollisionShape2D" parent="Borders"]
+position = Vector2(0.5, 331)
+shape = SubResource("RectangleShape2D_nv0gj")
+
+[node name="ScoreLeft" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ScoreLeft"]
+position = Vector2(-586, 1.5)
+shape = SubResource("RectangleShape2D_gj7r1")
+
+[node name="ScoreRight" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ScoreRight"]
+position = Vector2(579, 1.5)
+shape = SubResource("RectangleShape2D_360ay")
+
+[node name="Hud" type="CanvasLayer" parent="."]
+
+[node name="PlayerScore" type="Label" parent="Hud"]
+offset_left = 400.0
+offset_top = 13.0
+offset_right = 450.0
+offset_bottom = 63.0
+theme_override_fonts/font = ExtResource("2_e4014")
+theme_override_font_sizes/font_size = 50
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CPUScore" type="Label" parent="Hud"]
+offset_left = 700.0
+offset_top = 13.0
+offset_right = 750.0
+offset_bottom = 63.0
+theme_override_fonts/font = ExtResource("2_e4014")
+theme_override_font_sizes/font_size = 50
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BallTimer" type="Timer" parent="."]
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="BallTimer" to="." method="_on_ball_timer_timeout"]
