@@ -15,4 +15,13 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	# Move paddle towards the ball
+	ball_pos = $"../Ball".position
+	dist = position.y - ball_pos.y
+	
+	if (abs(dist) > get_parent().PADDLE_SPEED * delta):
+		move_by = get_parent().PADDLE_SPEED * delta * (dist/abs(dist))
+	else: 
+		move_by = dist
+	
+	position.y -= move_by
+	position.y = clamp(position.y, -266, 266)
